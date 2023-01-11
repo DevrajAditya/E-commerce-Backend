@@ -14,6 +14,16 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+// const isAuth=(req, res, next)=>{
+//   const authorization = req.headers.token;
+//   if(!authorization) return res.status(400).json("pass the token")
+//   const token = authorization.split(' ')[1];
+//   jwt.verify(token, process.env.JWT_SEC ,(err,decode)=>{
+//       if(err) return res.json({err, msg: "Please login again"})
+//       req.userId= decode
+//       next();
+//   })
+// }
 const verifyTokenAndAuthentication = (req, res, next) => {
   verifyToken(req, res, () => {
     console.log(req.user)

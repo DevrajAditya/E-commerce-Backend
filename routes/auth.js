@@ -3,6 +3,9 @@ const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const { JsonWebTokenError } = require("jsonwebtoken");
 const jwt = require("jsonwebtoken");
+// const isAuth   = require('./verifyToken');
+
+// const validateTokken = require('./verifyToken')
 
 // Register User
 
@@ -54,5 +57,11 @@ router.post("/login", async (req, res) => {
     res.status(500).json(error);
   }
 });
+
+
+// router.get('/validatetoken', isAuth.isAuth, (req, res)=>{
+//    if(!req.userId)  res.status(400).json({token: false})
+//       res.status(200).json({token: true})
+// })
 
 module.exports = router;

@@ -6,6 +6,13 @@ const {
   verifyTokenAndAdmin,
 } = require("./verifyToken");
 
+
+
+// test
+router.get('/test', (req,res)=>{
+  res.status(200).json({msg: "API is up and running"})
+})
+
 // UPDATE
 router.put("/:id", verifyTokenAndAuthentication, async (req, res) => {
   console.log(req.body);
