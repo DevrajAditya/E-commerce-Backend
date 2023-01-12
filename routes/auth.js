@@ -3,9 +3,6 @@ const User = require("../models/User");
 const CryptoJS = require("crypto-js");
 const { JsonWebTokenError } = require("jsonwebtoken");
 const jwt = require("jsonwebtoken");
-// const isAuth   = require('./verifyToken');
-
-// const validateTokken = require('./verifyToken')
 
 // Register User
 
@@ -23,7 +20,8 @@ router.post("/register", async (req, res) => {
     const saveUser = await newUser.save();
     res.status(201).json(saveUser);
   } catch (err) {
-    res.status(500).json(err);
+    console.log('==========>', err)
+    res.status(500).json({err: err, msg: "User is already register, Try another username"});
   }
 });
 
@@ -32,15 +30,17 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    !user && res.status(401).json("wrong credentails !");
+    if (!user)
+    return res.status(401).json("User not found !");
 
     const hashedPassword = CryptoJS.AES.decrypt(
       user.password,
       process.env.PASS_SEC
     );
     const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
-    OriginalPassword !== req.body.password &&
-      res.status(401).json("wrong credentails !");
+    if (OriginalPassword !== req.body.password) {
+      return res.status(401).json({error: "wrong credentails !"});
+    }
 
     const accessToken = jwt.sign(
       {
@@ -59,9 +59,5 @@ router.post("/login", async (req, res) => {
 });
 
 
-// router.get('/validatetoken', isAuth.isAuth, (req, res)=>{
-//    if(!req.userId)  res.status(400).json({token: false})
-//       res.status(200).json({token: true})
-// })
 
 module.exports = router;
